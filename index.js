@@ -278,8 +278,10 @@ app.get('/postings/date/:date', (req, res) => {
 
 /*---------------------------------LISTENING PORT----------------------------*/
 
-app.listen(port, () => {
-    console.log(`App listening at http://localhost:${port}`)
+app.set('port', (process.env.PORT || 80))
+
+app.listen(app.get('port'), function() {
+    console.log('App is running on port', app.get('port'))
 })
 
 /*
