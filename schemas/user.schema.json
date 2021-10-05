@@ -1,0 +1,65 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "userSchema",
+    "type": "object",
+    "title": "User schema",
+    "description": "This schema includes user information",
+    "default": {},
+    "examples": [
+        {
+            "userName": "user",
+            "password": "password",
+            "email": "email@email.com",
+            "phone": "1234567891"
+        }
+    ],
+    "required": [
+        "userName",
+        "password",
+        "email",
+        "phone"
+    ],
+    "properties": {
+        "userName": {
+            "$id": "#/properties/userName",
+            "type": "string",
+            "title": "The userName schema",
+            "description": "User name is going to be visible on your postings information",
+            "default": "",
+            "examples": [
+                "user"
+            ]
+        },
+        "password": {
+            "$id": "#/properties/password",
+            "type": "string",
+            "title": "The password schema",
+            "description": "Password for log in with the user name",
+            "default": "",
+            "examples": [
+                "password"
+            ]
+        },
+        "email": {
+            "$id": "#/properties/email",
+            "type": "string",
+            "title": "The email schema",
+            "description": "Email address thats going to be visible in the contact information field of your postings",
+            "default": "",
+            "examples": [
+                "email@email.com"
+            ]
+        },
+        "phone": {
+            "$id": "#/properties/phone",
+            "type": "string",
+            "title": "The phone schema",
+            "description": "Phone number thats going to be visible in the contact information field of your postings",
+            "default": "",
+            "examples": [
+                "1234567891"
+            ]
+        }
+    },
+    "additionalProperties": false
+}
