@@ -2,7 +2,7 @@ const { v4: uuidv4, validate } = require('uuid');
 const express = require('express')
 const bodyParser = require('body-parser')
 const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
+//const upload = multer({ dest: 'uploads/' })
 const app = express()
 const port = 3000
 const passport = require('passport');
@@ -19,6 +19,8 @@ const postingSchema = require('./schemas/posting.schema.json')
 const modifiedPostSchema = require('./schemas/modifiedPost.schema.json')
 const Ajv = require('ajv')
 const ajv = new Ajv()
+var cloudinary = require('cloudinary')
+var cloudinaryStorage = require('multer-storage-cloudinary')
 
 app.use(bodyParser.json())
 
@@ -163,6 +165,14 @@ const postings = [
 app.get('/postings', (req, res) => {
   res.json(postings)
 })
+
+var storage = cloudinaryStorage({
+    cloudinary: cloudinary,
+    folder: '',
+    allowedFormats: ['jpg', 'png']
+})
+
+var upload = multer({ storage: storage })
 
 //Create new posting
 app.post('/postings', passport.authenticate('jwt', { session : false }), postingValidation, upload.array('photos', 4), function(req, res, next) {
