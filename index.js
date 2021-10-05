@@ -48,6 +48,12 @@ const modifiedPostValidation = function(req, res, next) {
         next()
     }
 }
+/*------------------------------HOME PAGE-------------------------*/
+
+app.get('/', (req, res) => {
+    res.send("Welcome to my Building Cloud Integration Exercise Page")
+    res.send("</br>There is my Open API document: https://t9aumi00.stoplight.io/docs/bcigradedexercise/b3A6MjMwOTU0MzU-get-all-postings")
+})
 
 /*---------------------------------JWT----------------------------*/
 
