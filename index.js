@@ -26,7 +26,6 @@ app.use(bodyParser.json())
 
 //validations
 
-
 const userValidator = ajv.compile(userSchema)
 const postingValidator = ajv.compile(postingSchema)
 const modifiedPostValidator = ajv.compile(modifiedPostSchema)
@@ -71,7 +70,7 @@ const users = [
 
 const options = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: secrets.jwtSignKey,
+    secretOrKey: secrets,
     passReqToCallback: true,
 }
 
@@ -87,7 +86,7 @@ passport.use(new JwtStrategy(options, (req, payload, done) => {
 
 //login
 app.post('/login', passport.authenticate('basic', { session: false } ), (req, res) => {
-    const token = jwt.sign( {user: req.user.userName}, secrets.jwtSignKey)
+    const token = jwt.sign( {user: req.user.userName}, secrets)
     res.json({ token: token })
 })
 
@@ -299,23 +298,3 @@ app.set('port', (process.env.PORT || 80))
 app.listen(app.get('port'), function() {
     console.log('App is running on port', app.get('port'))
 })
-
-/*
-app.post('/photos/upload', upload.array('photos', 4), function (req, res, next) {
-    // req.files is array of `photos` files
-    // req.body will contain the text fields, if there were any
-    //images = req.files
-    console.log(req.files)
-    res.sendStatus(200)
-  })
-*/
-
-/*
-app.post('/login', passport.authenticate('basic', { session : false }), (req, res) => {
-    const token = jwt.sign({foo: "bar"}, secrets.jwtSignKey)
-    res.json({ token: token })
-})
-
-app.get('/jwt', passport.authenticate( 'basic', { session: false }), (req, res) => {
-    res.send('inside')
-})*/
