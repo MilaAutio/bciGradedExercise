@@ -173,7 +173,7 @@ var storage = cloudinaryStorage({
 var upload = multer({ storage: storage })
 
 //Create new posting
-app.post('/postings', passport.authenticate('jwt', { session : false }), postingValidation, upload.array('photos', 4), function(req, res, next) {
+app.post('/postings', passport.authenticate('jwt', { session : false }), postingValidation, upload.array('images', 4), function(req, res, next) {
     
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -223,7 +223,7 @@ app.delete('/postings/:postingID', passport.authenticate('jwt', { session : fals
 })
 
 //modify posting by id
-app.put('/postings/:postingID', passport.authenticate('jwt', { session : false }), modifiedPostValidation, upload.array('photos', 4), (req, res) => {
+app.put('/postings/:postingID', passport.authenticate('jwt', { session : false }), modifiedPostValidation, upload.array('images', 4), (req, res) => {
     const modifiedPost = postings.findIndex(post => post.id == req.params.postingID)
     if ( modifiedPost === undefined) {
         res.sendStatus(404)
