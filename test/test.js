@@ -2,27 +2,18 @@ const chai = require("chai")
 const expect = chai.expect
 const chaiHttp = require("chai-http")
 chai.use(chaiHttp)
-const server = require('../server')
 const addr = "https://mila-autio-bci-graded-exercise.herokuapp.com/"
 
 describe("BCI API Tests", function(){
 
-    before(function(){
-        server.start
-    })
-
-    after(function(){
-        server.close
-    })
-
-    describe('Post /signup and post /login at the same time', function(){
+    describe('Post /signup and post /login', function(){
         
         it('Sign up a new account to the system and give the status code 201', function(done){ 
             chai.request(addr)
             .post('/signup')
             .send({
                 userName : "user-example",
-                passWord : "salasana",
+                password : "salasana",
                 phone : "1231231233",
                 email : "email@gmail.com"
             })
@@ -38,7 +29,7 @@ describe("BCI API Tests", function(){
             .post('/signup')
             .send({
                 userName : "user-example",
-                passWord : "salasana",
+                password : "salasana",
                 phone : "1231231233"
                 
             })
