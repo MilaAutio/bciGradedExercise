@@ -160,7 +160,7 @@ const postings = [
         location: 'location', 
         images: images, 
         price: 'price', 
-        date: '12.3.2014', 
+        date: '2020-09-21', 
         deliveryType: 'shipping or pickup', 
         seller: 'User name', 
         contactInformation: 'contanct information'
@@ -181,7 +181,7 @@ var storage = cloudinaryStorage({
 var upload = multer({ storage: storage })
 
 //Create new posting
-app.post('/postings', passport.authenticate('jwt', { session : false }), postingValidation, upload.array('images', 4), function(req, res, next) {
+app.post('/postings', passport.authenticate('jwt', { session : false }), /*postingValidation,*/ upload.array('images', 4), function(req, res, next) {
     
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
