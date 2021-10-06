@@ -2,9 +2,18 @@ const chai = require("chai")
 const expect = chai.expect
 const chaiHttp = require("chai-http")
 chai.use(chaiHttp)
+const server = require('../server')
 const addr = "https://mila-autio-bci-graded-exercise.herokuapp.com/"
 
 describe("BCI API Tests", function(){
+
+    before(function(){
+        server.start
+    })
+
+    after(function(){
+        server.close
+    })
 
     describe('Post /signup and post /login', function(){
         
