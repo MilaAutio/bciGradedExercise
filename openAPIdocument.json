@@ -1,0 +1,685 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "BCIGradedExercise",
+      "version": "1.0",
+      "contact": {
+        "name": "Mila Autio",
+        "email": "t9aumi00@students.oamk.fi"
+      },
+      "description": "API which primary function is to serve as a platform for selling and buying used items"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000",
+        "description": "Mila Julianna Autio"
+      }
+    ],
+    "paths": {
+      "/users": {
+        "parameters": [],
+        "post": {
+          "summary": "Create new user",
+          "operationId": "post-users",
+          "responses": {
+            "201": {
+              "description": "Created"
+            },
+            "400": {
+              "description": "Rquest has missing or malformed information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  },
+                  "examples": {
+                    "example-1": {
+                      "value": {
+                        "errorDescription": "Request has missing or malformed information"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "description": "Create new user",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "userName",
+                    "email",
+                    "phone",
+                    "password"
+                  ]
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "userName": "my-user",
+                      "email": "email@email.com",
+                      "phone": "1231231233",
+                      "password": "password"
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              },
+              "application/javascript": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      },
+      "/postings": {
+        "post": {
+          "summary": "Create New Posting",
+          "operationId": "post-user",
+          "responses": {
+            "400": {
+              "description": "Missing Required Information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Posting Title"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "This is new posting"
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "cars"
+                    },
+                    "location": {
+                      "type": "string",
+                      "example": "Oulu"
+                    },
+                    "images": {
+                      "type": "array",
+                      "maxItems": 4,
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "price": {
+                      "type": "string",
+                      "example": "20€"
+                    },
+                    "deliveryType": {
+                      "type": "string",
+                      "example": "Shipping or pickup"
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "description",
+                    "category",
+                    "location",
+                    "images",
+                    "price",
+                    "deliveryType"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "title": "Posting Title",
+                      "description": "This is new posting",
+                      "category": "postings-category",
+                      "location": "Oulu",
+                      "images": [
+                        "image url"
+                      ],
+                      "price": "20€",
+                      "deliveryType": "Shipping or pickup"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Post the necessary fields for the API to create a new user."
+          },
+          "description": "Create a new posting",
+          "security": [
+            {
+              "HTTPBasic": []
+            }
+          ]
+        },
+        "parameters": [],
+        "get": {
+          "summary": "Get all postings",
+          "operationId": "get-postings",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Postings Not Found"
+            }
+          },
+          "description": "Get all postings",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Posting"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "123jkl123",
+                      "title": "Example Posting",
+                      "description": "This is a posting example",
+                      "category": "postings",
+                      "location": "New York",
+                      "images": [
+                        "image url"
+                      ],
+                      "price": "20€",
+                      "date": "2020-09-21",
+                      "deliveryType": "Pickup or Shipping",
+                      "sellersName": "username",
+                      "sellersContactInformation": "phone: 123123123, email: 123123123"
+                    }
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "/postings/category/{category}": {
+        "get": {
+          "summary": "GET postings by category",
+          "tags": [],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Category Not Found"
+            }
+          },
+          "operationId": "get-postings-(postingID)",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Posting"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "123jkl123",
+                      "title": "Example Posting",
+                      "description": "This is a posting example",
+                      "category": "postings",
+                      "location": "New York",
+                      "images": [
+                        "image url"
+                      ],
+                      "price": "20€",
+                      "date": "2020-09-21",
+                      "deliveryType": "Pickup or Shipping",
+                      "sellersName": "username",
+                      "sellersContactInformation": "phone: 123123123, email: 123123123"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "description": "Get posting by category"
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "category",
+            "in": "path",
+            "required": true
+          }
+        ]
+      },
+      "/postings/location/{location}": {
+        "get": {
+          "summary": "Get postings by location",
+          "tags": [],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Location Not Found"
+            }
+          },
+          "operationId": "get-postings-(location)",
+          "description": "Get postings by location",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Posting"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "123jkl123",
+                      "title": "Example Posting",
+                      "description": "This is a posting example",
+                      "category": "postings",
+                      "location": "New York",
+                      "images": [
+                        "image url"
+                      ],
+                      "price": "20€",
+                      "date": "2020-09-21",
+                      "deliveryType": "Pickup or Shipping",
+                      "sellersName": "username",
+                      "sellersContactInformation": "phone: 123123123, email: 123123123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "location",
+            "in": "path",
+            "required": true
+          }
+        ]
+      },
+      "/postings/date/{date}": {
+        "get": {
+          "summary": "Get postings by date",
+          "tags": [],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Date Not Found"
+            }
+          },
+          "operationId": "get-postings-(date)",
+          "description": "Get postings by date",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Posting"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "123jkl123",
+                      "title": "Example Posting",
+                      "description": "This is a posting example",
+                      "category": "postings",
+                      "location": "New York",
+                      "images": [
+                        "image url"
+                      ],
+                      "price": "20€",
+                      "date": "2020-09-21",
+                      "deliveryType": "Pickup or Shipping",
+                      "sellersName": "username",
+                      "sellersContactInformation": "phone: 123123123, email: 123123123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "description": "ISO 8601 format"
+          }
+        ]
+      },
+      "/postings/{postingID}": {
+        "get": {
+          "summary": "Get posting by ID",
+          "tags": [],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Posting Not Found"
+            }
+          },
+          "operationId": "get-postings-postingID",
+          "description": "Get posting by ID",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Posting"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "123jkl123",
+                      "title": "Example Posting",
+                      "description": "This is a posting example",
+                      "category": "postings",
+                      "location": "New York",
+                      "images": [
+                        "image url"
+                      ],
+                      "price": "20€",
+                      "date": "2020-09-21",
+                      "deliveryType": "Pickup or Shipping",
+                      "sellersName": "username",
+                      "sellersContactInformation": "phone: 123123123, email: 123123123"
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Posting"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "postingID",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "put": {
+          "summary": "Modify posting",
+          "operationId": "put-postings-postingID-postingID",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "404": {
+              "description": "Posting Not Found"
+            }
+          },
+          "description": "Modify posting",
+          "security": [
+            {
+              "HTTPBasic": []
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "type": "string"
+                    },
+                    "location": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "string"
+                    },
+                    "deliveryType": {
+                      "type": "string"
+                    },
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "title": "Posting Example",
+                      "description": "This is a posting description",
+                      "category": "posting-category",
+                      "location": "new-york",
+                      "price": "20€",
+                      "deliveryType": "pickup or shipping",
+                      "images": [
+                        "image url"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete posting",
+          "operationId": "delete-postings-postingID-postingID",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "404": {
+              "description": "Posting Not Found"
+            }
+          },
+          "description": "Delete posting",
+          "security": [
+            {
+              "HTTPBasic": []
+            }
+          ]
+        }
+      },
+      "/login": {
+        "post": {
+          "summary": "Login",
+          "operationId": "post-login",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "description": "Login with username and password",
+          "security": [
+            {
+              "HTTPBasic": []
+            }
+          ]
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "User": {
+          "title": "User",
+          "type": "object",
+          "description": "User information",
+          "examples": [
+            {
+              "userID": "1234hjk1234",
+              "userName": "user-name",
+              "email": "email@email.com",
+              "phone": "1231231233"
+            }
+          ],
+          "properties": {
+            "userID": {
+              "type": "string"
+            },
+            "userName": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            }
+          }
+        },
+        "ErrorResponse": {
+          "title": "ErrorResponse",
+          "type": "object",
+          "examples": [
+            {
+              "errorDescription": "Request has missing or malformed information"
+            }
+          ],
+          "properties": {
+            "errorDescription": {
+              "type": "string"
+            }
+          },
+          "description": ""
+        },
+        "Posting": {
+          "title": "Posting",
+          "type": "object",
+          "description": "",
+          "examples": [
+            {
+              "id": "123jkl123",
+              "title": "Example Posting",
+              "description": "This is a posting example",
+              "category": "postings",
+              "location": "New York",
+              "images": [
+                "image url"
+              ],
+              "price": "20€",
+              "date": "2020-09-21",
+              "deliveryType": "Pickup or Shipping",
+              "sellersName": "username",
+              "sellersContactInformation": "phone: 123123123, email: 123123123"
+            }
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "images": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "price": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string"
+            },
+            "deliveryType": {
+              "type": "string"
+            },
+            "sellersName": {
+              "type": "string"
+            },
+            "sellersContactInformation": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "HTTPBasic": {
+          "type": "http",
+          "scheme": "basic"
+        }
+      }
+    }
+  }
