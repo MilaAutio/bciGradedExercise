@@ -16,8 +16,6 @@ const ExtractJwt = require('passport-jwt').ExtractJwt
 //const secrets = process.env.JWT_SIGN_KEY
 const secrets = "secret"
 const userSchema = require('./schemas/user.schema.json')
-const postingSchema = require('./schemas/posting.schema.json')
-const modifiedPostSchema = require('./schemas/modifiedPost.schema.json')
 const Ajv = require('ajv')
 const ajv = new Ajv()
 var cloudinary = require('cloudinary')
@@ -28,28 +26,7 @@ app.use(bodyParser.json())
 //validations
 
 const userValidator = ajv.compile(userSchema)
-const postingValidator = ajv.compile(postingSchema)
-const modifiedPostValidator = ajv.compile(modifiedPostSchema)
 
-const postingValidation = function(req, res, next) {
-    const valid = postingValidator(req.body)
-    if(!valid) {
-        res.sendStatus(400)
-    }
-    else {
-        next()
-    }
-}
-
-const modifiedPostValidation = function(req, res, next) {
-    const valid = modifiedPostValidator(req.body)
-    if(!valid) {
-        res.sendStatus(400)
-    }
-    else {
-        next()
-    }
-}
 /*------------------------------HOME PAGE-------------------------*/
 
 app.get('/', (req, res) => {
@@ -161,7 +138,7 @@ const postings = [
         location: 'location', 
         images: images, 
         price: 'price', 
-        date: '2020-09-21', 
+        date: '2020-9-21', 
         deliveryType: 'shipping or pickup', 
         seller: 'User name', 
         contactInformation: 'contanct information'
@@ -182,13 +159,14 @@ var storage = cloudinaryStorage({
 var upload = multer({ storage: storage })
 
 //Create new posting
-app.post('/postings', passport.authenticate('jwt', { session : false }), /*postingValidation,*/ upload.array('images', 4), function(req, res, next) {
+app.post('/postings', passport.authenticate('jwt', { session : false }), upload.array('images', 4), function(req, res, next) {
     
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var ID = uuidv4()
     postings.push(
         { 
-            id: uuidv4(), 
+            id: ID, 
             title: req.body.title, 
             description: req.body.description,
             category: req.body.category,
@@ -200,6 +178,7 @@ app.post('/postings', passport.authenticate('jwt', { session : false }), /*posti
             seller: req.user.userName,
             contactInformation: "phone: " + req.user.phone + ", email: " + req.user.email
         })
+    res.json({"id": ID})
     res.sendStatus(201)
 })
 
@@ -232,7 +211,7 @@ app.delete('/postings/:postingID', passport.authenticate('jwt', { session : fals
 })
 
 //modify posting by id
-app.put('/postings/:postingID', passport.authenticate('jwt', { session : false }), modifiedPostValidation, upload.array('images', 4), (req, res) => {
+app.put('/postings/:postingID', passport.authenticate('jwt', { session : false }), upload.array('images', 4), (req, res) => {
     const modifiedPost = postings.findIndex(post => post.id == req.params.postingID)
     if ( modifiedPost === undefined) {
         res.sendStatus(404)
@@ -270,7 +249,8 @@ app.put('/postings/:postingID', passport.authenticate('jwt', { session : false }
 
 // Get postings by category, location or date
 app.get('/postings/category/:category', (req, res) => {
-    const category = postings.filter(d => d.category == req.params.category)
+    const category = postings.find(d => d.category == req.params.category)
+    console.log(category)
     if (category === undefined) {
         res.sendStatus(404)
     }
@@ -280,7 +260,7 @@ app.get('/postings/category/:category', (req, res) => {
 })
 
 app.get('/postings/location/:location', (req, res) => {
-    const location = postings.filter(d => d.location == req.params.location)
+    const location = postings.find(d => d.location == req.params.location)
     if (location === undefined) {
         res.sendStatus(404)
     }
@@ -290,7 +270,7 @@ app.get('/postings/location/:location', (req, res) => {
 })
 
 app.get('/postings/date/:date', (req, res) => {
-    const date = postings.filter(d => d.date == req.params.date)
+    const date = postings.find(d => d.date == req.params.date)
     if (date === undefined) {
         res.sendStatus(404)
     }
