@@ -67,33 +67,6 @@
                 "location"
             ]
         },
-        "images": {
-            "$id": "#/properties/images",
-            "type": "array",
-            "title": "The images schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": [],
-            "examples": [
-                [
-                    "image url"
-                ]
-            ],
-            "items": {
-                "$id": "#/properties/images/items",
-                "anyOf": [
-                    {
-                        "$id": "#/properties/images/items/anyOf/0",
-                        "type": "string",
-                        "title": "The first anyOf schema",
-                        "description": "An explanation about the purpose of this instance.",
-                        "default": "",
-                        "examples": [
-                            "image url"
-                        ]
-                    }
-                ]
-            }
-        },
         "price": {
             "$id": "#/properties/price",
             "type": "string",
@@ -115,5 +88,5 @@
             ]
         }
     },
-    "additionalProperties": false
+    "additionalProperties": true
 }
